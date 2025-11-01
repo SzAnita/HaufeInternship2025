@@ -1,0 +1,49 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="{% static 'styles.css' %}">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script>
+        let i = 0;
+        $(document).on("submit", ".sendComment", function (event){
+            event.preventDefault();
+            let comment = $("#comment"+i).val();
+            let prev_answer = $("#answer"+i).val();
+            $.ajax({
+                url: '../comment',
+                type: "POST",
+                headers: {
+                    'X-CSRFToken': $("input[name='csrfmiddlewaretoken']").val()
+                },
+                data: {
+                    'comment': comment,
+                    'prev_answer': prev_answer
+                },
+                success: function (data) {
+                    alert(data.response)
+                    $(".sendComment").before("<h4>User</h4><p>"+comment+"</p>")
+                    i = i+1;
+                    let response = "<h4>Response: </h4>";
+                    $(".sendComment").before(response, data.response);
+                }
+            })
+        })
+    </script>
+</head>
+<body>
+    <nav><a href="{% url 'codereview' %}">CodeReview</a></nav>
+    <div class="content">
+    <p>Language: {{ language }}</p>
+    <p>Original code: <code>{{ code }}</code></p>
+    <p id="answer0">{{ code_review | safe}}</p>
+    <form class="sendComment">
+        {% csrf_token %}
+        <textarea name="comment0" id="comment0" placeholder="Add a comment to the code review"></textarea>
+        <input type="submit" value="Send">
+    </form>
+    </div>
+</body>
+</html>

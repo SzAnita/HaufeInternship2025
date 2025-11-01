@@ -1,0 +1,30 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Code Review</title>
+    <link rel="stylesheet" href="{% static 'styles.css' %}">
+</head>
+<body>
+    <fieldset>
+    <legend>Upload your code for a code review</legend>
+    <form method="POST">
+        {% csrf_token %}
+        {% for field in form %}
+            {{ field.label_tag }}<br>
+            {{ field }}<br>
+            {% for e in field.errors %}
+                {{ e }}<br>
+            {% endfor %}
+
+        {% endfor %}
+        <input type="submit" value="Submit">
+    </form>
+    </fieldset>
+    {% if response %}
+        <p>Language: {{ language }}</p>
+        {{ codereview }}
+    {% endif %}
+</body>
+</html>
