@@ -7,7 +7,8 @@
     <link rel="stylesheet" href="{% static 'styles.css' %}">
 </head>
 <body>
-    <fieldset>
+    <nav><a href="{% url 'codereview' %}">CodeReview</a></nav>
+    <fieldset style="margin-top: 5px">
     <legend>Upload your code for a code review</legend>
     <form method="POST">
         {% csrf_token %}
